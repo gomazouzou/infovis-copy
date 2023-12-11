@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Python Code</title>
+</head>
+<body>
+    <input type="text" id="inputText1" placeholder="Enter text">
+    <input type="text" id="inputText2" placeholder="Enter text">
+    <input type="text" id="inputText3" placeholder="Enter text">
+    <input type="text" id="inputText4" placeholder="Enter text">
+    <button onclick="runPythonCode()">Run Python Code</button>
+    <div id="result"></div>
+
+    <script>
+        function runPythonCode() {
+            // テキストボックスの値を取得
+            var inputValue1 = document.getElementById('inputText1').value;
+            var inputValue2 = document.getElementById('inputText2').value;
+            var inputValue3 = document.getElementById('inputText3').value;
+            var inputValue4 = document.getElementById('inputText4').value;
+
+            // JSON形式に変換
+            var jsonData = {
+                inputs: [inputValue1, inputValue2, inputValue3, inputValue4]
+            };
+
+            // Pythonコードを実行するためにサーバーに送信
+            fetch('http://127.0.0.1:5000/run_python_code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),  // JSON文字列に変換して送信
+            })
+            .then(response => response.json())
+            .then(data => {
+                // サーバーからの応答を処理
+                console.log('Pythonコードの実行結果:', data.result);
+
+                // 結果を表示
+                document.getElementById('result').innerText = 'Result: ' + data.result;
+            })
+            .catch(error => {
+                console.error('エラー:', error);
+            });
+        }
+    </script>
+</body>
+</html>
+
